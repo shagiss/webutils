@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>CSS Examples</title>
+        <meta charset="utf-8">
+        <meta name="color-scheme" content="light dark">
+        <meta name="viewport" content="width=device-width">
+
+        <style>
+:root 
+{ 
+    color-scheme: light dark;
+    --text:       light-dark(#000, #fff);
+    --link:       light-dark(blue, yellow);
+    --background: light-dark(#fff, #000);
+}
+
+body
+{
+    color: var(--text);
+    font-family: sans-serif;
+    background-color: var(--background);
+}
+
+a
+{
+    color: var(--link);
+}
+
+        </style>
+
+        <script type="importmap">
+{
+    "imports": {
+        "css" : "./modules/css/index.js",
+        "new-html": "./modules/new-html/index.js"
+    }
+}
+        </script>
+    </head>
+    <body>
+        
+        <noscript>
+            <h1>NoScript is enabled</h1>
+            <p>Please turn off NoScript</p>
+        </noscript>
+
+        <script type="module">
+import { default as HTML } from "new-html"
+import { colorscheme, wcag } from "css"
+
+const title = new HTML("h1");
+title.text = "Hello, World!";
+title.parent(document.body);
+
+const link = new HTML("a");
+link.text = "This paragraph contains an 'a' tag.";
+link.href = "javascript:alert('it works!');";
+
+const paragraph = new HTML("p");
+paragraph.text = "This is an example text. ";
+paragraph
+    .children(link)
+    .parent(document.body);
+
+paragraph.text = " This script will use "
+const code = new HTML("code");
+code.text = "localStorage";
+code.parent(paragraph);
+
+paragraph.text = " to remember your color-scheme preferences, if you'll change it.";
+paragraph.text = " you can delete these preferences any time by deleting cookies and site data from this site.";
+
+const button = new HTML("button");
+button.type = "button";
+button.text = "Change the color scheme of this page";
+button.html.addEventListener("click", colorscheme.set);
+button.parent(document.body);
+
+const new_link = new HTML("a");
+new_link.text = " If you're too lazy, You can click on this text and i'll do it for you.";
+new_link.href = "javascript:;";
+new_link.html.addEventListener("click", function()
+{
+    this.parentNode.style.fontSize = "15pt";
+    this.parentNode.style.fontWeight = "bold";
+    this.parentNode.style.color = "#767676";
+});
+
+const new_paragraph = new HTML("p");
+new_paragraph.text = "Use the Inspect Element window to change the properties of this HTML element (for example, change the color of the text to something different, or change the background color). Once you've changed these CSS properties to whatever you like, Click on the button below to see if it meets the WCAG demands for accessible text";
+new_paragraph.text = " The results will be shown in the JavaScript console.";
+new_paragraph.children(new_link);
+new_paragraph.parent(document.body);
+
+const new_button = new HTML("button");
+new_button.type = "button";
+new_button.text = "Whenever you're ready, click on this button, then open the JavaScript console to see the results.";
+new_button.html.addEventListener("click", () => console.log(wcag.default(new_paragraph.html)));
+new_button.parent(document.body);
+
+        </script>
+
+    </body>
+</html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Viewport Examples</title>
+        <meta charset="utf-8">
+        <meta name="color-scheme" content="light dark">
+        <meta name="viewport" content="width=device-width">
+
+        <style>
+:root 
+{ 
+    color-scheme: light dark;
+    --text:       light-dark(#000, #fff);
+    --link:       light-dark(blue, yellow);
+    --background: light-dark(#fff, #000);
+}
+
+body
+{
+    color: var(--text);
+    font-family: sans-serif;
+    background-color: var(--background);
+}
+
+.circle
+{
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    display: block;
+    position: absolute;
+    border-radius: 100%;
+    pointer-events: none;
+    background-color: var(--link);
+    transform: translate(-50%, -50%);
+}
+
+        </style>
+
+        <script type="importmap">
+{
+    "imports": {
+        "viewport": "./modules/viewport/index.js",
+        "new-html": "./modules/new-html/index.js"
+    }
+}
+        </script>
+    </head>
+    <body>
+        
+        <noscript>
+            <h1>NoScript is enabled</h1>
+            <p>Please turn off NoScript</p>
+        </noscript>
+
+        <script type="module">
+import { default as HTML } from "new-html"
+import { default as viewport } from "viewport"
+
+const title = new HTML("h1");
+title.text = "Hello, World!";
+title.parent(document.body);
+
+const paragraph = new HTML("p");
+paragraph.text = "The circle is ";
+paragraph
+    .parent(document.body);
+
+const circle = new HTML("div");
+circle.parent(document.body);
+circle.class = "circle";
+circle.aria = { "hidden": true };
+/*
+const circle = new HTML("svg");
+circle
+.children(
+    (new HTML("circle")).
+                         attributes({
+                            "cy": 0,
+                            "cx": 0,
+                            "r" : 5,
+                         })
+)
+.attributes({
+    "aria": { "hidden": true }
+})
+.parent(document.body);
+*/
+
+const vp = viewport.default(circle.html);
+console.log(vp, circle.html);
+paragraph.text = (vp.boolean ? "outside" : "within") + " viewport";
+
+        </script>
+
+    </body>
+</html>
